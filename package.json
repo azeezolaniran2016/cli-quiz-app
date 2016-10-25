@@ -1,0 +1,19 @@
+{
+  "name": "cli-quiz-app",
+  "version": "0.0.1",
+  "description": "A Simple Command Line Quizz application.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/azeezolaniran2016/cli-quiz-app.git"
+  },
+  "author": "Azeez Olaniran",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/azeezolaniran2016/cli-quiz-app/issues"
+  },
+  "homepage": "https://github.com/azeezolaniran2016/cli-quiz-app#readme"
+}
