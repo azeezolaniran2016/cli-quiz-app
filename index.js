@@ -7,9 +7,33 @@ showWelcomeCommands();
 //function to display commands to console
 function showWelcomeCommands(){
   console.log("Available Command List");
-  console.log('"listQuizzes" - Lists out all quizzes available locally');
+  console.log('"listquizzes" - Lists out all quizzes available locally');
   console.log('"importquiz" - Import a quiz file from a directory in your host machine');
   console.log('"takequiz <quiz name> - Begin taking a quiz from the list of available quizzes"');
+}
+
+function actOnCommand(cmdList){
+  //switch based on first argument
+  var cmd = cmdList[0];
+  var arg = cmd[1];
+  switch(cmd){
+    case "listquizzes":{
+      break ;
+    }
+
+    case "importquiz":{
+      break ;
+    }
+
+    case "takequiz":{
+      break ;
+    }
+    default:{
+      console.log(cmd + " not recognized command");
+      showWelcomeCommands();
+      readline.prompt();
+    }
+  }
 }
 
 //set prompt character
@@ -23,6 +47,6 @@ readline.on("line", function(line){
     showWelcomeCommands();
     readline.prompt();
   }else{
-
+    actOnCommand(input);
   }
 });
