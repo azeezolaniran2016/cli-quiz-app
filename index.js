@@ -18,14 +18,15 @@ function showWelcomeCommands(){
 }
 
 function listLocalQuizzes(){
-  var availableLocalQuizzes = fileSystem.readdirSync(localQuizzesPath);
-  if(availableLocalQuizzes.length > 0){
-    for(var currentIndex = 0; currentIndex < availableLocalQuizzes.length; currentIndex++){
-      console.log("There are " + (currentIndex + 1) + " quizzes available locally:");
+  var availableLocalQuizzes = fileSystem.readdirSync(localQuizzesPath); //Do a synchronous read of all files in the directory
+  var totalQuizzes = availableLocalQuizzes.length; //Get lenght of files in the directory
+  if( totalQuizzes > 0){ //If there are more than one quiz file, list them out
+    console.log("There are " + totalQuizzes + " quizzes locally available;");
+    for(var currentIndex = 0; currentIndex < totalQuizzes; currentIndex++){
       console.log("\t" + (currentIndex + 1 ) + " - " + availableLocalQuizzes[currentIndex].replace(".json", ""));
     }
-  }else{
-    console.log("There are no quizzes available locally");
+  }else{//There are no quiz file
+    console.log("There are no locally available quizzes");
   }
   readline.prompt();
 }
