@@ -1,0 +1,15 @@
+{"time":"10 Min",
+  "questions":[{"title" : "2 + 3 = ?", "solution":"A", "options" : [{"opt": "3"}, {"opt": "2"}, {"opt": "5"}, {"opt": "8"}]},
+  {"title" : "2 + 3 = ?", "solution":"A", "options" : [{"opt": "3"}, {"opt": "2"}, {"opt": "5"}, {"opt": "8"}]},
+  {"title" : "2 - 9 = ?", "solution":"A", "options" : [{"opt": "-7"}, {"opt": "10"}, {"opt": "51"}, {"opt": "18"}]},
+  {"title" : "7 x 5 = ?", "solution":"C", "options" : [{"opt": "30"}, {"opt": "23"}, {"opt": "35"}, {"opt": "80"}]},
+  {"title" : "2 x 6 = ?", "solution":"D", "options" : [{"opt": "3"}, {"opt": "2"}, {"opt": "5"}, {"opt": "12"}]},
+  {"title" : "2(3 + 3) = ?", "solution":"B", "options" : [{"opt": "9"}, {"opt": "12"}, {"opt": "15"}, {"opt": "18"}]},
+  {"title" : "3 - 27 + 27 = ?", "solution":"A", "options" : [{"opt": "3"}, {"opt": "24"}, {"opt": "51"}, {"opt": "8"}]},
+  {"title" : "2 x 2 x 10 = ?", "solution":"D", "options" : [{"opt": "3"}, {"opt": "20"}, {"opt": "15"}, {"opt": "40"}]},
+  {"title" : "2 - 3 = ?", "solution":"C", "options" : [{"opt": "1"}, {"opt": "0"}, {"opt": "-1"}, {"opt": "8"}]},
+  {"title" : "100/1 = ?", "solution":"A", "options" : [{"opt": "100"}, {"opt": "10"}, {"opt": "1000"}, {"opt": "8"}]},
+  {"title" : "(40 - 400) + 200 = ?", "solution":"D", "options" : [{"opt": "10"}, {"opt": "200"}, {"opt": "160"}, {"opt": "-160"}]},
+  {"title" : "2 + 1000 = ?", "solution":"A", "options" : [{"opt": "1002"}, {"opt": "102"}, {"opt": "10002"}, {"opt": "20"}]}
+  ]
+}
