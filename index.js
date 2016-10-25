@@ -31,6 +31,12 @@ function listLocalQuizzes(){
   readline.prompt();
 }
 
+function getQuizJsonObjectFromLocalFile(fileName){
+  var content = fileSystem.readFileSync(localQuizzesPath + "/" + fileName + ".json");
+  console.log("Fetching " + fileName + " Quiz");
+  var jsonContent = JSON.parse(content);
+  return jsonContent ;
+}
 //Function to add on user input command
 function actOnCommand(commandList){
   //switch based on first argument
@@ -47,6 +53,7 @@ function actOnCommand(commandList){
     }
 
     case "takequiz":{
+      getQuizJsonObjectFromLocalFile(option);
       break ;
     }
     default:{
