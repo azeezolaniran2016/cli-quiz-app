@@ -4,6 +4,7 @@ const readline = requireReadLine.createInterface({
 });
 console.log("Andela CLI Quiz App");
 showWelcomeCommands();
+
 //function to display commands to console
 function showWelcomeCommands(){
   console.log("Available Command List");
@@ -12,11 +13,12 @@ function showWelcomeCommands(){
   console.log('"takequiz <quiz name> - Begin taking a quiz from the list of available quizzes"');
 }
 
-function actOnCommand(cmdList){
+//Function to add on user input command
+function actOnCommand(commandList){
   //switch based on first argument
-  var cmd = cmdList[0];
-  var arg = cmd[1];
-  switch(cmd){
+  var command = commandList[0];
+  var option = commandList[1];
+  switch(command){
     case "listquizzes":{
       break ;
     }
@@ -29,7 +31,7 @@ function actOnCommand(cmdList){
       break ;
     }
     default:{
-      console.log(cmd + " not recognized command");
+      console.log(command + " is not a recognized command");
       showWelcomeCommands();
       readline.prompt();
     }
