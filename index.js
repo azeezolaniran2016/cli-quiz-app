@@ -11,3 +11,18 @@ function showWelcomeCommands(){
   console.log('"importquiz" - Import a quiz file from a directory in your host machine');
   console.log('"takequiz <quiz name> - Begin taking a quiz from the list of available quizzes"');
 }
+
+//set prompt character
+readline.setPrompt(">> ");
+readline.prompt() ; //prompt user for input
+
+readline.on("line", function(line){
+  input = line.split(" "); //Split user input to get command and argument.
+  if(input.length > 2){
+    console.log("Invalid command entered. Try again with appropriate command");
+    showWelcomeCommands();
+    readline.prompt();
+  }else{
+
+  }
+});
