@@ -2,6 +2,10 @@ const requireReadLine = require("readline");
 const readline = requireReadLine.createInterface({
   input: process.stdin , output: process.stdout
 });
+
+const localQuizzesPath = "./quizzes";
+const fileSystem = require("fs");
+
 console.log("Andela CLI Quiz App");
 showWelcomeCommands();
 
@@ -13,6 +17,19 @@ function showWelcomeCommands(){
   console.log('"takequiz <quiz name> - Begin taking a quiz from the list of available quizzes"');
 }
 
+function listLocalQuizzes(){
+  var availableLocalQuizzes = fileSystem.readdirSync(localQuizzesPath);
+  if(availableLocalQuizzes.length > 0){
+    for(var currentIndex = 0; currentIndex < availableLocalQuizzes.length; currentIndex++){
+      console.log("There are " + (currentIndex + 1) + " quizzes available locally:");
+      console.log("\t" + (currentIndex + 1 ) + " - " + availableLocalQuizzes[currentIndex].replace(".json", ""));
+    }
+  }else{
+    console.log("There are no quizzes available locally");
+  }
+  readline.prompt();
+}
+
 //Function to add on user input command
 function actOnCommand(commandList){
   //switch based on first argument
@@ -20,6 +37,7 @@ function actOnCommand(commandList){
   var option = commandList[1];
   switch(command){
     case "listquizzes":{
+      listLocalQuizzes();
       break ;
     }
 
