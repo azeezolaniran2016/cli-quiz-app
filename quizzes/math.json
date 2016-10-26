@@ -1,13 +1,1 @@
-{"time":"10 Min",
-  "questions":[{"title" : "2 + 3 = ?", "solution":"A", "options" : [{"opt": "3"}, {"opt": "2"}, {"opt": "5"}, {"opt": "8"}]},
-  {"title" : "2 - 9 = ?", "solution":"A", "options" : [{"opt": "-7"}, {"opt": "10"}, {"opt": "51"}, {"opt": "18"}]},
-  {"title" : "7 x 5 = ?", "solution":"C", "options" : [{"opt": "30"}, {"opt": "23"}, {"opt": "35"}, {"opt": "80"}]},
-  {"title" : "2 x 6 = ?", "solution":"D", "options" : [{"opt": "3"}, {"opt": "2"}, {"opt": "5"}, {"opt": "12"}]},
-  {"title" : "2(3 + 3) = ?", "solution":"B", "options" : [{"opt": "9"}, {"opt": "8"}, {"opt": "15"}, {"opt": "18"}]},
-  {"title" : "3 - 27 + 27 = ?", "solution":"A", "options" : [{"opt": "3"}, {"opt": "24"}, {"opt": "51"}, {"opt": "8"}]},
-  {"title" : "2 x 2 x 10 = ?", "solution":"D", "options" : [{"opt": "3"}, {"opt": "20"}, {"opt": "15"}, {"opt": "40"}]},
-  {"title" : "2 - 3 = ?", "solution":"C", "options" : [{"opt": "1"}, {"opt": "0"}, {"opt": "-1"}, {"opt": "8"}]},
-  {"title" : "(40 - 400) + 200 = ?", "solution":"D", "options" : [{"opt": "10"}, {"opt": "200"}, {"opt": "160"}, {"opt": "-160"}]},
-  {"title" : "2 + 1000 = ?", "solution":"A", "options" : [{"opt": "1002"}, {"opt": "102"}, {"opt": "10002"}, {"opt": "20"}]}
-  ]
-}
+{"question1":{"A":"5","B":"6","C":"7","D":"8","answer":"A","title":"2 + 3 ?"},"question10":{"A":"1","B":"0","C":"-1","D":"8","answer":"C","title":"2 - 3 = ?"},"question2":{"A":"-160","B":"160","C":"100","D":"16","answer":"A","title":"(40 - 400) + 200 ?"},"question3":{"A":"100002","B":"10002","C":"102","D":"1002","answer":"D","title":"2 + 1000 ?"},"question4":{"A":"15","B":"10","C":"-7","D":"18","answer":"C","title":"2 - 9 = ?"},"question5":{"A":"30","B":"23","C":"35","D":"80","answer":"C","title":"7 x 5 = ?"},"question6":{"A":"3","B":"2","C":"5","D":"12","answer":"D","title":"2 x 6 = ?"},"question7":{"A":"9","B":"12","C":"15","D":"18","answer":"B","title":"2(3 + 3) = ?"},"question8":{"A":"3","B":"24","C":"51","D":"8","answer":"A","title":"3 - 27 + 27 = ?"},"question9":{"A":"3","B":"20","C":"15","D":"40","answer":"D","title":"2 x 10 x 10 = ?"},"time":"3"}
