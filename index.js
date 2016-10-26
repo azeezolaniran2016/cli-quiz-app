@@ -34,7 +34,8 @@ function showWelcomeCommands(){
   console.log('  "importquiz [path to source] [output file name] " - Import a quiz file from a directory in your host machine');
   console.log('  "takequiz [quizname] - Begin taking a quiz from the list of available quizzes"');
   console.log('  "listonlinequizzes" - Lists Quizzes that are available online');
-  console.log('  "downloadonlinequiz [quizname]" - Downloads specified quiz to your local library if it does not exist');
+  console.log('  "downloadonlinequiz [quizname]" - Downloads specified quiz from firebase quiz repository to your local library');
+  console.log('  "uploadquiz [quizname]" - Uploads specified Quiz to firebase quiz repository');
   //set prompt character
   readline.prompt() ; //prompt user for input
 }
@@ -54,6 +55,21 @@ function listOnlineQuizzes(){
     });
 }
 
+function uploadQuizToFirebaseRepository(quizName){
+  //check if the quiz doesn't exist on the repo
+  readline.pause();
+  console.log("Starting Quiz upload");
+  var jsonObject = getQuizJsonObjectFromLocalFile(quizName);
+  //var jsonString = JSON.stringify(jsonObject);
+  //console.log(jsonString);
+  //console.log(jsonObject);
+  var ref = firebase.database().ref("Subjects/");
+  ref.child(quizName).set(jsonObject);
+  console.log("Quizz uploaded");
+  readline.resume();
+  readline.prompt();
+}
+
 function downloadOnlineQuiz(quizName){
   readline.pause();
   //Check if the quiz exists first
@@ -65,14 +81,17 @@ function downloadOnlineQuiz(quizName){
     var jsonString = JSON.stringify(snapshot.val());
     saved = fileSystem.writeFileSync(localQuizzesPath + "/" + quizName + ".json", jsonString, 'utf8');
     console.log("File Download successfull");
+    readline.resume();
     readline.prompt();
   }, function(errorObject){
     console.log("Failed to download quiz. Try again later");
+    readline.resume();
   }) ;
   //If it exists, proceed.. else tell user it doesn't exist
 }
 
 function listLocalQuizzes(){
+  readline.pause();
   var availableLocalQuizzes = fileSystem.readdirSync(localQuizzesPath); //Do a synchronous read of all files in the directory
   var totalQuizzes = availableLocalQuizzes.length; //Get lenght of files in the directory
   if( totalQuizzes > 0){ //If there are more than one quiz file, list them out
@@ -83,13 +102,13 @@ function listLocalQuizzes(){
   }else{//There are no quiz file
     console.log("There are no locally available quizzes");
   }
+  readline.resume();
   readline.prompt();
 }
 
 //Function to get a quizz json object from a specified file in the quizz directory
 function getQuizJsonObjectFromLocalFile(fileName){
   var content = fileSystem.readFileSync(localQuizzesPath + "/" + fileName + ".json");
-  console.log("Fetching " + fileName + " Quiz");
   var jsonContent = JSON.parse(content);
   return jsonContent ;
 }
@@ -145,10 +164,15 @@ function actOnCommand(commandList){
       downloadOnlineQuiz(argument1.trim());
       break ;
     }
+    case "uploadquiz":{
+      uploadQuizToFirebaseRepository(argument1.trim());
+      break ;
+    }
     case "takequiz":{
       quizOn = true ;
       readline.setPrompt("Answer >> "); //Set prompt character
-      jsonQuiz = getQuizJsonObjectFromLocalFile(argument1); //set .jsonQuiz
+      console.log("Fetching " + argument1.trim() + " Quiz");
+      jsonQuiz = getQuizJsonObjectFromLocalFile(argument1.trim()); //set .jsonQuiz
       currentQuestionIndex = 0 ; //reset current question
       currentScore = 0 ; //reset user score
       serveNextJsonQuestion() ; //serve next question to user
