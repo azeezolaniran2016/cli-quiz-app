@@ -1,0 +1,23 @@
+{"time":"10 Min",
+  "questions":[{"title" : "Which definition BEST describes a computer ?",
+   "solution":"C", "options" : [{"opt": "A solar calculating machine."}, {"opt": "A machine used to surf the web."}, {"opt": "An electronic device that manipulates information and data."}, {"opt": "A device that collects dust and viruses."}]},
+  {"title" : "The physical parts of a computer. (Hint- The parts you can touch).?",
+   "solution":"A", "options" : [{"opt": "Hardware"}, {"opt": "Software"}, {"opt": "Spyware"}, {"opt": "Touchpad"}]},
+  {"title" : "In todays society,  there are many forms of technology that function similarly to a computer. Which is NOT an example of another type of computer system?",
+   "solution":"D", "options" : [{"opt": "XBOX"}, {"opt": "IPOD"}, {"opt": "CELL PHONE"}, {"opt": "RADIO"}]},
+  {"title" : "Choose the input device from the list below.?",
+   "solution":"B", "options" : [{"opt": "Speaker"}, {"opt": "Mouse"}, {"opt": "Printer"}, {"opt": "Monitor"}]},
+  {"title" : "Choose the output device from the list below.?",
+   "solution":"D", "options" : [{"opt": "Keyboard"}, {"opt": "Scanner"}, {"opt": "Mouse"}, {"opt": "Printer"}]},
+  {"title" : "Choose the part below that is known as the BRAIN of the computer. ?",
+   "solution":"A", "options" : [{"opt": "CPU"}, {"opt": "RAM"}, {"opt": "Motherboard"}, {"opt": "Monitor"}]},
+  {"title" : "Which of the following is known as the main circuit board, located inside the tower?",
+   "solution":"B", "options" : [{"opt": "Power cord"}, {"opt": "Motherboard"}, {"opt": "Keyboard"}, {"opt": "Surfboard"}]},
+  {"title" : "This type of plug helps connect a digital camera and IPOD (as well as other peripheral divices) to the computer?",
+   "solution":"D", "options" : [{"opt": "AUP"}, {"opt": "BIOS"}, {"opt": "CPU"}, {"opt": "USB"}]},
+  {"title" : "The First Computer, created in 1946, was called?",
+   "solution":"D", "options" : [{"opt": "The Retro-boot"}, {"opt": "The atomic calculator"}, {"opt": "The web-bot"}, {"opt": "The ENIAC"}]},
+  {"title" : "Which is NOT a part of a computer ?",
+   "solution":"B", "options" : [{"opt": "Keyboard"}, {"opt": "Antenna"}, {"opt": "USB Port"}, {"opt": "HDMI Port"}]}
+  ]
+}
