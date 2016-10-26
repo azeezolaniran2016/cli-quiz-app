@@ -59,11 +59,28 @@ function serveNextJsonQuestion(){
   readline.prompt(); //Prompt User for Input
 }
 
+//fuction to Import a quiz file
+function importLocalQuizFile(sourcePath, outputName){
+  if(fileSystem.existsSync(sourcePath)){// check source path
+    if(fileSystem.existsSync(localQuizzesPath + "/" + outputName + ".json")){//Check, we don't want to override an already existing quiz
+        console.log("Quiz file already exists locally.")
+    }else{//Quiz doesn't already exist. copy it
+      console.log("Copying file...") ;
+      fileSystem.createReadStream(sourcePath).pipe(fileSystem.createWriteStream(localQuizzesPath + "/" + outputName + ".json"));
+      console.log("Finished copying file") ;
+    }
+  }else{
+    console.log(" Source File Doesn't exist");
+  }
+  readline.prompt();
+}
+
 //Function to add on user input command
 function actOnCommand(commandList){
   //switch based on first argument
   var command = commandList[0];
   var argument1 = commandList[1];
+  var argument2 = commandList[2];
   switch(command){
     case "listquizzes":{
       listLocalQuizzes();
@@ -71,6 +88,7 @@ function actOnCommand(commandList){
     }
 
     case "importquiz":{
+      importLocalQuizFile(argument1.trim().replace("\\","/"), argument2.trim());
       break ;
     }
 
@@ -130,7 +148,7 @@ readline.on("line", function(line){
     }
   }else{
     input = line.split(" "); //Split user input to get command and argument.
-    if(input.length > 2){
+    if(input.length < 1){
       console.log("Invalid command entered. Try again with appropriate command");
       showWelcomeCommands();
     }else{
