@@ -34,6 +34,7 @@ function showWelcomeCommands(){
   console.log('  "importquiz [path to source] [output file name] " - Import a quiz file from a directory in your host machine');
   console.log('  "takequiz [quizname] - Begin taking a quiz from the list of available quizzes"');
   console.log('  "listonlinequizzes" - Lists Quizzes that are available online');
+  console.log('  "downloadonlinequiz [quizname]" - Downloads specified quiz to your local library if it does not exist');
   //set prompt character
   readline.prompt() ; //prompt user for input
 }
@@ -51,6 +52,24 @@ function listOnlineQuizzes(){
       readline.resume();
       readline.prompt();
     });
+}
+
+function downloadOnlineQuiz(quizName){
+  readline.pause();
+  //Check if the quiz exists first
+  if (fileSystem.existsSync(localQuizzesPath + "/" + quizName + ".json")){
+    console.log("File Already Exists and would be overwritten");
+  }
+  var query = firebase.database().ref("Subjects/" + quizName);
+  query.on("value", function(snapshot){
+    var jsonString = JSON.stringify(snapshot.val());
+    saved = fileSystem.writeFileSync(localQuizzesPath + "/" + quizName + ".json", jsonString, 'utf8');
+    console.log("File Download successfull");
+    readline.prompt();
+  }, function(errorObject){
+    console.log("Failed to download quiz. Try again later");
+  }) ;
+  //If it exists, proceed.. else tell user it doesn't exist
 }
 
 function listLocalQuizzes(){
@@ -122,7 +141,10 @@ function actOnCommand(commandList){
       importLocalQuizFile(argument1.trim().replace("\\","/"), argument2.trim());
       break ;
     }
-
+    case "downloadonlinequiz":{
+      downloadOnlineQuiz(argument1.trim());
+      break ;
+    }
     case "takequiz":{
       quizOn = true ;
       readline.setPrompt("Answer >> "); //Set prompt character
