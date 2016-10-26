@@ -5,6 +5,18 @@ const readline = requireReadLine.createInterface({
 
 const localQuizzesPath = "./quizzes";
 const fileSystem = require("fs");
+const firebase = require("firebase");
+
+const firebaseConfig = { //Declare firebase configuration file
+  apiKey: "AIzaSyAO_eNpYlQ4poDQbKWuCuWz4uWGcqmBscg",
+  authDomain: "cli-quiz-app.firebaseapp.com",
+  databaseURL: "https://cli-quiz-app.firebaseio.com",
+  storageBucket: "cli-quiz-app.appspot.com",
+  messagingSenderId: "236696717593"
+};
+
+firebase.initializeApp(firebaseConfig); //Initialize firebase with configuration
+
 var quizOn = false ; //Quiz mode is turn on
 var jsonQuiz ; //Pointer to current json quiz object
 var currentQuestionIndex; //Pointer for current question index
@@ -19,10 +31,26 @@ showWelcomeCommands();
 function showWelcomeCommands(){
   console.log("\n\tAvailable Commands");
   console.log('  "listquizzes" - Lists out all quizzes available locally');
-  console.log('  "importquiz [path to source]" - Import a quiz file from a directory in your host machine');
+  console.log('  "importquiz [path to source] [output file name] " - Import a quiz file from a directory in your host machine');
   console.log('  "takequiz [quizname] - Begin taking a quiz from the list of available quizzes"');
+  console.log('  "listonlinequizzes" - Lists Quizzes that are available online');
   //set prompt character
   readline.prompt() ; //prompt user for input
+}
+
+function listOnlineQuizzes(){
+  readline.pause();
+  console.log("     Fetching Online Quizzes. Please wait....");
+  var query = firebase.database().ref("Subjects");
+  query.once("value").then(function(snapshot){
+      var count = 1 ; ;
+      snapshot.forEach(function(childSnapshot){
+        console.log("\t" + count + " - " + childSnapshot.key);
+        ++count ;
+      });
+      readline.resume();
+      readline.prompt();
+    });
 }
 
 function listLocalQuizzes(){
@@ -86,7 +114,10 @@ function actOnCommand(commandList){
       listLocalQuizzes();
       break ;
     }
-
+    case "listonlinequizzes":{
+      listOnlineQuizzes();
+      break ;
+    }
     case "importquiz":{
       importLocalQuizFile(argument1.trim().replace("\\","/"), argument2.trim());
       break ;
