@@ -207,20 +207,26 @@ function startQuiz(quizName){
 }
 
 //Function to add on user input command
-function executeInputCommand(commandList){
+function executeInputCommand(commands){
   //switch based on first argument
-  var command = commandList[0];
-  var argument1 = commandList[1];
-  var argument2 = commandList[2];
-  switch(command){
+  var input = commands[0];
+  var option1 = commands[1];
+  var option2 = commands[2];
+  switch(input){
     case "listquizzes":{
       listLocalQuizzes();
       break ;
     }
     case "setusername":{
-      userFirstName = argument1.trim() ;
-      userLastName = argument2.trim() ;
-      readline.prompt();
+      try{
+        userFirstName = option1.trim() ;
+        userLastName = option2.trim() ;
+        readline.prompt();
+      }catch(err){
+        readline.prompt();
+        console.log("Invalid Command. Try Again..");
+        showWelcomeCommands();
+      }
       break ;
     }
     case "listonlinequizzes":{
@@ -228,23 +234,47 @@ function executeInputCommand(commandList){
       break ;
     }
     case "importquiz":{
-      importLocalQuizFile(argument1.trim().replace("\\","/"), argument2.trim());
+      try{
+        importLocalQuizFile(option1.trim().replace("\\","/"), option2.trim());
+      }catch(err){
+        readline.prompt();
+        console.log("Invalid Command. Try Again..");
+        showWelcomeCommands();
+      }
       break ;
     }
     case "downloadonlinequiz":{
-      downloadOnlineQuiz(argument1.trim());
+      try{
+        downloadOnlineQuiz(option1.trim());
+      }catch(err){
+        readline.prompt();
+        console.log("Invalid Command. Try Again..");
+        showWelcomeCommands();
+      }
       break ;
     }
     case "uploadquiz":{
-      uploadQuiz(argument1.trim());
+      try{
+        uploadQuiz(option1.trim());
+      }catch(err){
+        readline.prompt();
+        console.log("Invalid Command. Try Again..");
+        showWelcomeCommands();
+      }
       break ;
     }
     case "takequiz":{
-      startQuiz(argument1.trim());
+      try{
+        startQuiz(option1.trim());
+      }catch(err){
+        readline.prompt();
+        console.log("Invalid Command. Try Again..");
+        showWelcomeCommands();
+      }
       break
     }
     default:{
-      console.log(command + " is not a recognized command.");
+      console.log(input + " is not a recognized command.");
       showWelcomeCommands();
     }
   }
@@ -317,7 +347,7 @@ readline.on("line", function(line){
     }
   }else{
     input = line.trim().split(" "); //Split user input to get command and argument.
-    if(input.length < 1){
+    if(input.length < 1 || input.length > 3){
       console.log("Invalid command entered. Try again with appropriate command");
       showWelcomeCommands();
     }else{
