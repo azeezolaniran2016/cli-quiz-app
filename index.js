@@ -22,7 +22,9 @@ var jsonQuiz ; //Pointer to current json quiz object
 var currentQuestionIndex; //Pointer for current question index
 var currentAnswer ; //Pointer to current question answer
 var currentScore ; //Pointer to current quiz score
-var currentQuizName ;
+var currentQuizName ; //variable to hold current quiz name
+var userFirstName ;//
+var userLastName ;
 
 readline.setPrompt(">> ")
 console.log("\n******************** Andela CLI Quiz App ********************");
@@ -37,6 +39,7 @@ function showWelcomeCommands(){
   console.log('  "listonlinequizzes" - Lists Quizzes that are available online');
   console.log('  "downloadonlinequiz [quizname]" - Downloads specified quiz from firebase quiz repository to your local library');
   console.log('  "uploadquiz [quizname]" - Uploads specified Quiz to firebase quiz repository');
+  console.log('  "setusername [first name] [last name]" - Set user first and last name');
   //set prompt character
   readline.prompt() ; //prompt user for input
 }
@@ -259,6 +262,11 @@ function actOnCommand(commandList){
       listLocalQuizzes();
       break ;
     }
+    case "setusername":{
+      userFirstName = (typeof argument1 === undefined ? "" : argument1) ;
+      userLastName = (typeof argument2 === undefined ? "" : argument2) ;
+      break ;
+    }
     case "listonlinequizzes":{
       listOnlineQuizzes();
       break ;
@@ -308,7 +316,7 @@ readline.on("line", function(line){
         if(currentQuestionIndex >= 10){
           quizOn = false ; //turn off quiz mode
           console.log("\n End of " + currentQuizName.toUpperCase() + " Quiz Session ");
-          console.log("\tYour Score : " + currentScore + " / 10" );
+          console.log("\t" + userFirstName + " " + userLastName + " - Your Score : " + currentScore + " / 10" );
           readline.setPrompt(">>"); //Set prompt
           showWelcomeCommands();  //Show user welcome commands
           //end of quiz reached
