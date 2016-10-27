@@ -23,12 +23,13 @@ var currentQuestion; //Pointer for current question
 var currentAnswer ; //Pointer to current question answer
 var currentScore ; //Pointer to current quiz score
 var currentQuizName ; //variable to hold current quiz name
-var userFirstName = "Unknown" ;//
-var userLastName = "Unknown";
+var userFirstName = "" ;//
+var userLastName = "";
 
-readline.setPrompt(">> ")
 console.log("\n******************** Andela CLI Quiz App ********************");
-showWelcomeCommands();
+console.log("\nPlease Enter a NAME to continue");
+readline.setPrompt("Your Name >> ");
+readline.prompt();
 
 //function to display commands to console
 function showWelcomeCommands(){
@@ -41,6 +42,7 @@ function showWelcomeCommands(){
   console.log('  "uploadquiz [quizname]" - Uploads specified Quiz to firebase quiz repository');
   console.log('  "setusername [first name] [last name]" - Set user first and last name\n');
   //set prompt character
+  readline.setPrompt(">> ");
   readline.prompt() ; //prompt user for input
 }
 
@@ -255,11 +257,31 @@ function printQuizResult(firstName, lastName, quizName, score){
   console.log("\tScore : " + score);
 }
 
+
+function setUserName(name){
+    userFirstName = name.trim();
+    if(userFirstName == ""){
+      console.log("\nPlease Enter a NAME to continue");
+      readline.setPrompt("Your Name >> ");
+      readline.prompt();
+    }else{
+      showWelcomeCommands();
+    }
+}
+
+//function to read user inputs
 readline.on("line", function(line){
-  //we are having a quiz right now
-  var answer = line.trim();
-  answer = answer.toUpperCase();
+  //Ensure user enters his name before continuing with the app
+
+  if(userFirstName === "" ){
+    setUserName(line) ;
+    return ;
+  }
+
   if(quizOn){
+    //we are having a quiz right now
+    var answer = line.trim();
+    answer = answer.toUpperCase();
     switch(answer) {
       case "A":
       case "B":
