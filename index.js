@@ -279,6 +279,7 @@ function actOnCommand(commandList){
       readline.setPrompt("Answer >> "); //Set prompt character
       console.log("Fetching " + argument1.trim() + " Quiz");
       jsonQuiz = getQuizJsonObjectFromLocalFile(argument1.trim()); //set .jsonQuiz
+      console.log("\n Quiz Session Started. \t Maximum Duration : " + jsonQuiz.time + " Mins");
       currentQuestionIndex = 0 ; //reset current question
       currentScore = 0 ; //reset user score
       serveNextJsonQuestion() ; //serve next question to user
@@ -304,7 +305,7 @@ readline.on("line", function(line){
       case "D":{
         if(currentQuestionIndex >= 10){
           quizOn = false ; //turn off quiz mode
-          console.log("\n End of Quizzes");
+          console.log("\n End of Quiz Session");
           console.log("\tYour Score : " + currentScore + " / 10" );
           readline.setPrompt(">>"); //Set prompt
           showWelcomeCommands();  //Show user welcome commands
