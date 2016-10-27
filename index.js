@@ -59,7 +59,7 @@ function listOnlineQuizzes(){
     });
 }
 
-function uploadQuizToFirebaseRepository(quizName){
+function uploadQuiz(quizName){
   //check if the quiz doesn't exist on the repo
   readline.pause();
   console.log("Starting Quiz upload");
@@ -226,7 +226,7 @@ function actOnCommand(commandList){
       break ;
     }
     case "uploadquiz":{
-      uploadQuizToFirebaseRepository(argument1.trim());
+      uploadQuiz(argument1.trim());
       break ;
     }
     case "takequiz":{
