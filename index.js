@@ -166,8 +166,8 @@ function fetchQuestion(parent, child){
   }
 }
 
-//Function to serve a next question
-function serveNextJsonQuestion(){
+//Function to show user the next question
+function nextQuestion(){
   ++currentQuestion ;
   var question = fetchQuestion(jsonQuiz, currentQuestion);
   currentAnswer = question.answer ;
@@ -238,7 +238,7 @@ function actOnCommand(commandList){
       console.log("\n Quiz Session Started. \t Maximum Duration : " + jsonQuiz.time + " Mins");
       currentQuestion = 0 ; //reset current question
       currentScore = 0 ; //reset user score
-      serveNextJsonQuestion() ; //serve next question to user
+      nextQuestion() ; //serve next question to user
       break
     }
     default:{
@@ -276,7 +276,7 @@ readline.on("line", function(line){
           if(answer === currentAnswer){
             ++currentScore ; //update user score
           }
-          serveNextJsonQuestion();//serve next question when ready
+          nextQuestion();//serve next question when ready
         }
         break ;
       }
