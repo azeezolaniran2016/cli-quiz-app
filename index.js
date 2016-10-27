@@ -205,7 +205,7 @@ function startQuiz(quizName){
 }
 
 //Function to add on user input command
-function actOnCommand(commandList){
+function executeInputCommand(commandList){
   //switch based on first argument
   var command = commandList[0];
   var argument1 = commandList[1];
@@ -299,7 +299,7 @@ readline.on("line", function(line){
       console.log("Invalid command entered. Try again with appropriate command");
       showWelcomeCommands();
     }else{
-      actOnCommand(input);
+      executeInputCommand(input);
     }
   }
 });
