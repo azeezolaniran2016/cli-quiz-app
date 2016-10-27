@@ -19,7 +19,7 @@ firebase.initializeApp(firebaseConfig); //Initialize firebase with configuration
 
 var quizOn = false ; //Quiz mode is turn on
 var jsonQuiz ; //Pointer to current json quiz object
-var currentQuestionIndex; //Pointer for current question index
+var currentQuestion; //Pointer for current question
 var currentAnswer ; //Pointer to current question answer
 var currentScore ; //Pointer to current quiz score
 var currentQuizName ; //variable to hold current quiz name
@@ -117,122 +117,67 @@ function getQuizJsonObjectFromLocalFile(fileName){
   return jsonContent ;
 }
 
-function serveNextJsonQuestion(){
-  ++currentQuestionIndex ;
-  switch(currentQuestionIndex){
-    case 1 :{
-      currentAnswer = jsonQuiz.question1.answer ;
-      console.log("\n  [ Question " + currentQuestionIndex  + " ]"); //Header for each question
-      console.log("\t" + jsonQuiz.question1.title); //Show question
-      console.log("\t" + "(A) " + jsonQuiz.question1.A); //Show option A
-      console.log("\t" + "(B) " + jsonQuiz.question1.B); //Show option B
-      console.log("\t" + "(C) " + jsonQuiz.question1.C); //Show option C
-      console.log("\t" + "(D) " + jsonQuiz.question1.D); //Show option D
+//function to fectch specific question from a subject three
+function fetchQuestion(parent, child){
+  switch(child){
+    case 1:{
+      return parent.question1 ;
       break ;
     }
     case 2:{
-      currentAnswer = jsonQuiz.question2.answer ;
-      console.log("\n  [ Question " + currentQuestionIndex  + " ]"); //Header for each question
-      console.log("\t" + jsonQuiz.question2.title); //Show question
-      console.log("\t" + "(A) " + jsonQuiz.question2.A); //Show option A
-      console.log("\t" + "(B) " + jsonQuiz.question2.B); //Show option B
-      console.log("\t" + "(C) " + jsonQuiz.question2.C); //Show option C
-      console.log("\t" + "(D) " + jsonQuiz.question2.D); //Show option D
+      return parent.question2 ;
       break ;
     }
     case 3:{
-      currentAnswer = jsonQuiz.question3.answer ;
-      console.log("\n  [ Question " + currentQuestionIndex  + " ]"); //Header for each question
-      console.log("\t" + jsonQuiz.question3.title); //Show question
-      console.log("\t" + "(A) " + jsonQuiz.question3.A); //Show option A
-      console.log("\t" + "(B) " + jsonQuiz.question3.B); //Show option B
-      console.log("\t" + "(C) " + jsonQuiz.question3.C); //Show option C
-      console.log("\t" + "(D) " + jsonQuiz.question3.D); //Show option D
+      return parent.question3 ;
       break ;
     }
     case 4:{
-      currentAnswer = jsonQuiz.question4.answer ;
-      console.log("\n  [ Question " + currentQuestionIndex  + " ]"); //Header for each question
-      console.log("\t" + jsonQuiz.question4.title); //Show question
-      console.log("\t" + "(A) " + jsonQuiz.question4.A); //Show option A
-      console.log("\t" + "(B) " + jsonQuiz.question4.B); //Show option B
-      console.log("\t" + "(C) " + jsonQuiz.question4.C); //Show option C
-      console.log("\t" + "(D) " + jsonQuiz.question4.D); //Show option D
+      return parent.question4 ;
       break ;
     }
     case 5:{
-      currentAnswer = jsonQuiz.question5.answer ;
-      console.log("\n  [ Question " + currentQuestionIndex  + " ]"); //Header for each question
-      console.log("\t" + jsonQuiz.question5.title); //Show question
-      console.log("\t" + "(A) " + jsonQuiz.question5.A); //Show option A
-      console.log("\t" + "(B) " + jsonQuiz.question5.B); //Show option B
-      console.log("\t" + "(C) " + jsonQuiz.question5.C); //Show option C
-      console.log("\t" + "(D) " + jsonQuiz.question5.D); //Show option D
+      return parent.question5 ;
       break ;
     }
     case 6:{
-      currentAnswer = jsonQuiz.question6.answer ;
-      console.log("\n  [ Question " + currentQuestionIndex  + " ]"); //Header for each question
-      console.log("\t" + jsonQuiz.question6.title); //Show question
-      console.log("\t" + "(A) " + jsonQuiz.question6.A); //Show option A
-      console.log("\t" + "(B) " + jsonQuiz.question6.B); //Show option B
-      console.log("\t" + "(C) " + jsonQuiz.question6.C); //Show option C
-      console.log("\t" + "(D) " + jsonQuiz.question6.D); //Show option D
+      return parent.question6 ;
       break ;
     }
     case 7:{
-      currentAnswer = jsonQuiz.question7.answer ;
-      console.log("\n  [ Question " + currentQuestionIndex  + " ]"); //Header for each question
-      console.log("\t" + jsonQuiz.question7.title); //Show question
-      console.log("\t" + "(A) " + jsonQuiz.question7.A); //Show option A
-      console.log("\t" + "(B) " + jsonQuiz.question7.B); //Show option B
-      console.log("\t" + "(C) " + jsonQuiz.question7.C); //Show option C
-      console.log("\t" + "(D) " + jsonQuiz.question7.D); //Show option D
+      return parent.question7 ;
       break ;
     }
     case 8:{
-      currentAnswer = jsonQuiz.question8.answer ;
-      console.log("\n  [ Question " + currentQuestionIndex  + " ]"); //Header for each question
-      console.log("\t" + jsonQuiz.question8.title); //Show question
-      console.log("\t" + "(A) " + jsonQuiz.question8.A); //Show option A
-      console.log("\t" + "(B) " + jsonQuiz.question8.B); //Show option B
-      console.log("\t" + "(C) " + jsonQuiz.question8.C); //Show option C
-      console.log("\t" + "(D) " + jsonQuiz.question8.D); //Show option D
+      return parent.question8 ;
       break ;
     }
     case 9:{
-      currentAnswer = jsonQuiz.question9.answer ;
-      console.log("\n  [ Question " + currentQuestionIndex  + " ]"); //Header for each question
-      console.log("\t" + jsonQuiz.question9.title); //Show question
-      console.log("\t" + "(A) " + jsonQuiz.question9.A); //Show option A
-      console.log("\t" + "(B) " + jsonQuiz.question9.B); //Show option B
-      console.log("\t" + "(C) " + jsonQuiz.question9.C); //Show option C
-      console.log("\t" + "(D) " + jsonQuiz.question9.D); //Show option D
-      break;
-    }
-    case 10:{
-      currentAnswer = jsonQuiz.question10.answer ;
-      console.log("\n  [ Question " + currentQuestionIndex  + " ]"); //Header for each question
-      console.log("\t" + jsonQuiz.question10.title); //Show question
-      console.log("\t" + "(A) " + jsonQuiz.question10.A); //Show option A
-      console.log("\t" + "(B) " + jsonQuiz.question10.B); //Show option B
-      console.log("\t" + "(C) " + jsonQuiz.question10.C); //Show option C
-      console.log("\t" + "(D) " + jsonQuiz.question10.D); //Show option D
+      return parent.question9 ;
       break ;
     }
+    case 10:{
+      return parent.question10 ;
+      break ;
+    }
+    default:{
+      return parent.question1 ;
+    }
   }
+}
+
+//Function to serve a next question
+function serveNextJsonQuestion(){
+  ++currentQuestion ;
+  var question = fetchQuestion(jsonQuiz, currentQuestion);
+  currentAnswer = question.answer ;
+  console.log("\n  [ Question " + currentQuestion  + " ]"); //Header for each question
+  console.log("\t" + question.title); //Show question
+  console.log("\t" + "(A) " + question.A); //Show option A
+  console.log("\t" + "(B) " + question.B); //Show option B
+  console.log("\t" + "(C) " + question.C); //Show option C
+  console.log("\t" + "(D) " + question.D); //Show option D
   readline.prompt();
-/*
-  console.log("\n  [ Question " + (currentQuestionIndex + 1) + " ]"); //Header for each question
-  console.log("\t" + jsonQuiz.questions[currentQuestionIndex].title); //Show question
-  currentAnswer = jsonQuiz.questions[currentQuestionIndex].solution;  //Update current question solution pointer
-  console.log("\t" + "(A) " + jsonQuiz.questions[currentQuestionIndex].options[0].opt ); //Show option A
-  console.log("\t" + "(B) " + jsonQuiz.questions[currentQuestionIndex].options[1].opt); //Show option B
-  console.log("\t" + "(C) " + jsonQuiz.questions[currentQuestionIndex].options[2].opt); //Show option C
-  console.log("\t" + "(D) " + jsonQuiz.questions[currentQuestionIndex].options[3].opt); //Show option D
-  ++currentQuestionIndex ; //Increment current question index to point to next question
-  readline.prompt(); //Prompt User for Input
-*/
 }
 
 //fuction to Import a quiz file
@@ -291,7 +236,7 @@ function actOnCommand(commandList){
       currentQuizName = argument1.trim().toUpperCase() ;
       jsonQuiz = getQuizJsonObjectFromLocalFile(argument1.trim()); //set .jsonQuiz
       console.log("\n Quiz Session Started. \t Maximum Duration : " + jsonQuiz.time + " Mins");
-      currentQuestionIndex = 0 ; //reset current question
+      currentQuestion = 0 ; //reset current question
       currentScore = 0 ; //reset user score
       serveNextJsonQuestion() ; //serve next question to user
       break
@@ -320,7 +265,7 @@ readline.on("line", function(line){
       case "B":
       case "C":
       case "D":{
-        if(currentQuestionIndex >= 10){
+        if(currentQuestion >= 10){
           quizOn = false ; //turn off quiz mode
           console.log("\n Results For " + currentQuizName + " Quiz Session ");
           printQuizResult(userFirstName, userLastName, currentQuizName, currentScore + " / 10")
