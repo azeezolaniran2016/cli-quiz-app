@@ -64,9 +64,6 @@ function uploadQuiz(quizName){
   readline.pause();
   console.log("Starting Quiz upload");
   var jsonObject = importLocalQuiz(quizName);
-  //var jsonString = JSON.stringify(jsonObject);
-  //console.log(jsonString);
-  //console.log(jsonObject);
   var ref = firebase.database().ref("Subjects/");
   ref.child(quizName).set(jsonObject);
   console.log("Quizz uploaded");
@@ -91,7 +88,6 @@ function downloadOnlineQuiz(quizName){
     console.log("Failed to download quiz. Try again later");
     readline.resume();
   }) ;
-  //If it exists, proceed.. else tell user it doesn't exist
 }
 
 function listLocalQuizzes(){
@@ -294,7 +290,7 @@ readline.on("line", function(line){
       }
     }
   }else{
-    input = line.split(" "); //Split user input to get command and argument.
+    input = line.trim().split(" "); //Split user input to get command and argument.
     if(input.length < 1){
       console.log("Invalid command entered. Try again with appropriate command");
       showWelcomeCommands();
