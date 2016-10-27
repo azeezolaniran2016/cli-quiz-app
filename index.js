@@ -23,8 +23,8 @@ var currentQuestionIndex; //Pointer for current question index
 var currentAnswer ; //Pointer to current question answer
 var currentScore ; //Pointer to current quiz score
 var currentQuizName ; //variable to hold current quiz name
-var userFirstName ;//
-var userLastName ;
+var userFirstName = "Unknown" ;//
+var userLastName = "Unknown";
 
 readline.setPrompt(">> ")
 console.log("\n******************** Andela CLI Quiz App ********************");
@@ -39,7 +39,7 @@ function showWelcomeCommands(){
   console.log('  "listonlinequizzes" - Lists Quizzes that are available online');
   console.log('  "downloadonlinequiz [quizname]" - Downloads specified quiz from firebase quiz repository to your local library');
   console.log('  "uploadquiz [quizname]" - Uploads specified Quiz to firebase quiz repository');
-  console.log('  "setusername [first name] [last name]" - Set user first and last name');
+  console.log('  "setusername [first name] [last name]" - Set user first and last name\n');
   //set prompt character
   readline.prompt() ; //prompt user for input
 }
@@ -263,8 +263,9 @@ function actOnCommand(commandList){
       break ;
     }
     case "setusername":{
-      userFirstName = (typeof argument1 === undefined ? "" : argument1) ;
-      userLastName = (typeof argument2 === undefined ? "" : argument2) ;
+      userFirstName = argument1.trim() ;
+      userLastName = argument2.trim() ;
+      readline.prompt();
       break ;
     }
     case "listonlinequizzes":{
@@ -287,7 +288,7 @@ function actOnCommand(commandList){
       quizOn = true ;
       readline.setPrompt("Answer >> "); //Set prompt character
       console.log("Fetching " + argument1.trim() + " Quiz");
-      currentQuizName = argument1.trim() ;
+      currentQuizName = argument1.trim().toUpperCase() ;
       jsonQuiz = getQuizJsonObjectFromLocalFile(argument1.trim()); //set .jsonQuiz
       console.log("\n Quiz Session Started. \t Maximum Duration : " + jsonQuiz.time + " Mins");
       currentQuestionIndex = 0 ; //reset current question
@@ -298,9 +299,15 @@ function actOnCommand(commandList){
     default:{
       console.log(command + " is not a recognized command.");
       showWelcomeCommands();
-      readline.prompt();
     }
   }
+}
+
+function printQuizResult(firstName, lastName, quizName, score){
+  console.log("\tFirst Name : " + firstName);
+  console.log("\tLast Name : "  + lastName);
+  console.log("\tQuiz : " + quizName);
+  console.log("\tScore : " + score);
 }
 
 readline.on("line", function(line){
@@ -315,9 +322,9 @@ readline.on("line", function(line){
       case "D":{
         if(currentQuestionIndex >= 10){
           quizOn = false ; //turn off quiz mode
-          console.log("\n End of " + currentQuizName.toUpperCase() + " Quiz Session ");
-          console.log("\t" + userFirstName + " " + userLastName + " - Your Score : " + currentScore + " / 10" );
-          readline.setPrompt(">>"); //Set prompt
+          console.log("\n Results For " + currentQuizName + " Quiz Session ");
+          printQuizResult(userFirstName, userLastName, currentQuizName, currentScore + " / 10")
+          readline.setPrompt(">> "); //Set prompt
           showWelcomeCommands();  //Show user welcome commands
           //end of quiz reached
         }else{
