@@ -6,6 +6,7 @@ const readline = requireReadLine.createInterface({
 const localQuizzesPath = "./quizzes/"; //Path to local quizzes folder
 const fileSystem = require("fs");
 const firebase = require("firebase");
+const user = require("user");
 
 const firebaseConfig = { //Declare firebase configuration file
   apiKey: "AIzaSyAO_eNpYlQ4poDQbKWuCuWz4uWGcqmBscg",
@@ -23,10 +24,11 @@ var currentQuestion; //Pointer for current question
 var currentAnswer ; //Pointer to current question answer
 var currentScore ; //Pointer to current quiz score
 var currentQuizName ; //variable to hold current quiz name
-var userFirstName = "" ;//
-var userLastName = "";
-
-console.log("\n******************** Andela CLI Quiz App ********************");
+//var userFirstName = "" ;//
+//var userLastName = "";
+console.log("\nCLI  *************************************************");
+console.log("******************* Quiz App *************************");
+console.log("**********************************  By Azeez Olaniran.");
 console.log("\nPlease Enter a NAME to continue");
 readline.setPrompt("Your Name >> ");
 readline.prompt();
@@ -219,8 +221,8 @@ function executeInputCommand(commands){
     }
     case "setusername":{
       try{
-        userFirstName = option1.trim() ;
-        userLastName = option2.trim() ;
+        user.FirstName = option1.trim() ;
+        user.LastName = option2.trim() ;
         readline.prompt();
       }catch(err){
         readline.prompt();
@@ -280,9 +282,9 @@ function executeInputCommand(commands){
   }
 }
 
-function printQuizResult(firstName, lastName, quizName, score){
-  console.log("\tFirst Name : " + firstName);
-  console.log("\tLast Name : "  + lastName);
+function printQuizResult(user.firstName, user.LastName, quizName, score){
+  console.log("\tFirst Name : " + user.firstName);
+  console.log("\tLast Name : "  + user.lastName);
   console.log("\tQuiz : " + quizName);
   console.log("\tScore : " + score);
 }
@@ -290,7 +292,7 @@ function printQuizResult(firstName, lastName, quizName, score){
 
 function setUserName(name){
     userFirstName = name.trim();
-    if(userFirstName == ""){
+    if(user.FirstName == ""){
       console.log("\nPlease Enter a NAME to continue");
       readline.setPrompt("Your Name >> ");
       readline.prompt();
@@ -303,8 +305,8 @@ function setUserName(name){
 readline.on("line", function(line){
   //Ensure user enters his name before continuing with the app
 
-  if(userFirstName === "" ){
-    setUserName(line) ;
+  if(user.FirstName === "" ){
+    user.FirstName = line ;
     return ;
   }
 
@@ -320,7 +322,7 @@ readline.on("line", function(line){
         if(currentQuestion >= 10){
           quizOn = false ; //turn off quiz mode
           console.log("\n Results For " + currentQuizName + " Quiz Session ");
-          printQuizResult(userFirstName, userLastName, currentQuizName, currentScore + " / 10")
+          printQuizResult(user.FirstName, user.LastName, currentQuizName, currentScore + " / 10")
           readline.setPrompt(">> "); //Set prompt
           showWelcomeCommands();  //Show user welcome commands
           //end of quiz reached
