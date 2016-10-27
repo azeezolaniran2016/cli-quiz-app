@@ -192,6 +192,18 @@ function importLocalQuizFile(sourcePath, outputName){
   readline.prompt();
 }
 
+function startQuiz(quizName){
+  quizOn = true ;
+  readline.setPrompt("Answer >> "); //Set prompt character
+  console.log("Fetching " + quizName + " Quiz");
+  currentQuizName = quizName.toUpperCase() ;
+  jsonQuiz = importLocalQuiz(quizName); //set .jsonQuiz
+  console.log("\n Quiz Session Started. \t Maximum Duration : " + jsonQuiz.time + " Mins");
+  currentQuestion = 0 ; //reset current question
+  currentScore = 0 ; //reset user score
+  nextQuestion() ; //serve next question to user
+}
+
 //Function to add on user input command
 function actOnCommand(commandList){
   //switch based on first argument
@@ -226,15 +238,7 @@ function actOnCommand(commandList){
       break ;
     }
     case "takequiz":{
-      quizOn = true ;
-      readline.setPrompt("Answer >> "); //Set prompt character
-      console.log("Fetching " + argument1.trim() + " Quiz");
-      currentQuizName = argument1.trim().toUpperCase() ;
-      jsonQuiz = importLocalQuiz(argument1.trim()); //set .jsonQuiz
-      console.log("\n Quiz Session Started. \t Maximum Duration : " + jsonQuiz.time + " Mins");
-      currentQuestion = 0 ; //reset current question
-      currentScore = 0 ; //reset user score
-      nextQuestion() ; //serve next question to user
+      startQuiz(argument1.trim());
       break
     }
     default:{
