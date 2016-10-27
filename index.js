@@ -22,6 +22,7 @@ var jsonQuiz ; //Pointer to current json quiz object
 var currentQuestionIndex; //Pointer for current question index
 var currentAnswer ; //Pointer to current question answer
 var currentScore ; //Pointer to current quiz score
+var currentQuizName ;
 
 readline.setPrompt(">> ")
 console.log("\n******************** Andela CLI Quiz App ********************");
@@ -278,6 +279,7 @@ function actOnCommand(commandList){
       quizOn = true ;
       readline.setPrompt("Answer >> "); //Set prompt character
       console.log("Fetching " + argument1.trim() + " Quiz");
+      currentQuizName = argument1.trim() ;
       jsonQuiz = getQuizJsonObjectFromLocalFile(argument1.trim()); //set .jsonQuiz
       console.log("\n Quiz Session Started. \t Maximum Duration : " + jsonQuiz.time + " Mins");
       currentQuestionIndex = 0 ; //reset current question
@@ -305,7 +307,7 @@ readline.on("line", function(line){
       case "D":{
         if(currentQuestionIndex >= 10){
           quizOn = false ; //turn off quiz mode
-          console.log("\n End of Quiz Session");
+          console.log("\n End of " + currentQuizName.toUpperCase() + " Quiz Session ");
           console.log("\tYour Score : " + currentScore + " / 10" );
           readline.setPrompt(">>"); //Set prompt
           showWelcomeCommands();  //Show user welcome commands
