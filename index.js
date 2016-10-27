@@ -8,6 +8,7 @@ const fileSystem = require("fs");
 const firebase = require("firebase");
 const user = new(require("./user"));//create a new user object
 const quiz = require("./quiz");
+const file_handler = new (require("./file_handler"));
 
 const firebaseConfig = { //Declare firebase configuration file
   apiKey: "AIzaSyAO_eNpYlQ4poDQbKWuCuWz4uWGcqmBscg",
@@ -86,50 +87,11 @@ function downloadOnlineQuiz(quizName){
   }) ;
 }
 
-function listLocalQuizzes(){
-  readline.pause();
-  var availableLocalQuizzes = fileSystem.readdirSync(localQuizzesPath); //Do a synchronous read of all files in the directory
-  var totalQuizzes = availableLocalQuizzes.length; //Get lenght of files in the directory
-  if( totalQuizzes > 0){ //If there are more than one quiz file, list them out
-    console.log("There are " + totalQuizzes + " quizzes locally available;");
-    for(var currentIndex = 0; currentIndex < totalQuizzes; currentIndex++){
-      console.log("\t" + (currentIndex + 1 ) + " - " + availableLocalQuizzes[currentIndex].replace(".json", ""));
-    }
-  }else{//There are no quiz file
-    console.log("There are no locally available quizzes");
-  }
-  readline.resume();
-  readline.prompt();
-}
-
-//Function to get a quizz json object from a specified file in the quizz directory
-function importLocalQuiz(fileName){
-  var content = fileSystem.readFileSync(localQuizzesPath + fileName + ".json");
-  var jsonContent = JSON.parse(content);
-  return jsonContent ;
-}
-
-//fuction to Import a quiz file
-function importLocalQuizFile(sourcePath, outputName){
-  if(fileSystem.existsSync(sourcePath)){// check source path
-    if(fileSystem.existsSync(localQuizzesPath + outputName + ".json")){//Check, we don't want to override an already existing quiz
-        console.log("Quiz file already exists locally.")
-    }else{//Quiz doesn't already exist. copy it
-      console.log("Copying file...") ;
-      fileSystem.createReadStream(sourcePath).pipe(fileSystem.createWriteStream(localQuizzesPath + outputName + ".json"));
-      console.log("Finished copying file") ;
-    }
-  }else{
-    console.log(" Source File Doesn't exist");
-  }
-  readline.prompt();
-}
-
 function startQuiz(quizName){
   quizOn = true ;
   readline.setPrompt("Answer >> "); //Set prompt character
   console.log("Fetching " + quizName.toUpperCase() + " Quiz");
-  currentQuiz = new quiz(quizName.toUpperCase(), importLocalQuiz(quizName));
+  currentQuiz = new quiz(quizName.toUpperCase(), file_handler.fetchQuiz(quizName));
   user.currentScore = 0 ; //reset user score
   console.log("\n Quiz Session Started. \t Maximum Duration : " + currentQuiz.duration + " Mins");
   currentQuiz.nextQuestion(readline);
@@ -143,7 +105,7 @@ function executeInputCommand(commands){
   var option2 = commands[2];
   switch(input){
     case "listquizzes":{
-      listLocalQuizzes();
+      file_handler.listLocalQuizzes(readline);
       break ;
     }
     case "setusername":{
@@ -157,7 +119,7 @@ function executeInputCommand(commands){
       break ;
     }
     case "importquiz":{
-      importLocalQuizFile(option1.trim().replace("\\","/"), option2.trim());
+      file_handler.importLocalQuizFile(option1.trim().replace("\\","/"), option2.trim(), readline);
       break ;
     }
     case "downloadonlinequiz":{
