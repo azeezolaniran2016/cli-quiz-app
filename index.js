@@ -1,12 +1,13 @@
 const requireReadLine = require("readline");
 const readline = requireReadLine.createInterface({
-  input: process.stdin , output: process.stdout, terminal: false
+  input: process.stdin , output: process.stdout
 });
 
 const localQuizzesPath = "./quizzes/"; //Path to local quizzes folder
 const fileSystem = require("fs");
 const firebase = require("firebase");
-const user = require("user");
+const user = new(require("./user"));//create a new user object
+const quiz = require("./quiz");
 
 const firebaseConfig = { //Declare firebase configuration file
   apiKey: "AIzaSyAO_eNpYlQ4poDQbKWuCuWz4uWGcqmBscg",
@@ -19,19 +20,11 @@ const firebaseConfig = { //Declare firebase configuration file
 firebase.initializeApp(firebaseConfig); //Initialize firebase with configuration
 
 var quizOn = false ; //Quiz mode is turn on
-var jsonQuiz ; //Pointer to current json quiz object
-var currentQuestion; //Pointer for current question
-var currentAnswer ; //Pointer to current question answer
-var currentScore ; //Pointer to current quiz score
-var currentQuizName ; //variable to hold current quiz name
-//var userFirstName = "" ;//
-//var userLastName = "";
+var currentQuiz ; //variable to hold current quiz Object
 console.log("\nCLI  *************************************************");
 console.log("******************* Quiz App *************************");
 console.log("**********************************  By Azeez Olaniran.");
-console.log("\nPlease Enter a NAME to continue");
-readline.setPrompt("Your Name >> ");
-readline.prompt();
+showWelcomeCommands();
 
 //function to display commands to console
 function showWelcomeCommands(){
@@ -43,8 +36,7 @@ function showWelcomeCommands(){
   console.log('  "downloadonlinequiz [quizname]" - Downloads specified quiz from firebase quiz repository to your local library');
   console.log('  "uploadquiz [quizname]" - Uploads specified Quiz to firebase quiz repository');
   console.log('  "setusername [first name] [last name]" - Set user first and last name\n');
-  //set prompt character
-  readline.setPrompt(">> ");
+  readline.setPrompt(">> ");//set prompt character
   readline.prompt() ; //prompt user for input
 }
 
@@ -117,69 +109,6 @@ function importLocalQuiz(fileName){
   return jsonContent ;
 }
 
-//function to fectch specific question from a subject three
-function fetchQuestion(parent, child){
-  switch(child){
-    case 1:{
-      return parent.question1 ;
-      break ;
-    }
-    case 2:{
-      return parent.question2 ;
-      break ;
-    }
-    case 3:{
-      return parent.question3 ;
-      break ;
-    }
-    case 4:{
-      return parent.question4 ;
-      break ;
-    }
-    case 5:{
-      return parent.question5 ;
-      break ;
-    }
-    case 6:{
-      return parent.question6 ;
-      break ;
-    }
-    case 7:{
-      return parent.question7 ;
-      break ;
-    }
-    case 8:{
-      return parent.question8 ;
-      break ;
-    }
-    case 9:{
-      return parent.question9 ;
-      break ;
-    }
-    case 10:{
-      return parent.question10 ;
-      break ;
-    }
-    default:{
-      return parent.question1 ;
-    }
-  }
-}
-
-//Function to show user the next question
-function nextQuestion(){
-  ++currentQuestion ;
-  var question = fetchQuestion(jsonQuiz, currentQuestion);
-  currentAnswer = question.answer ;
-  console.log("\n  [ Question " + currentQuestion  + " ]"); //Header for each question
-  console.log("\t" + question.title); //Show question
-  console.log("\t" + "(A) " + question.A); //Show option A
-  console.log("\t" + "(B) " + question.B); //Show option B
-  console.log("\t" + "(C) " + question.C); //Show option C
-  console.log("\t" + "(D) " + question.D); //Show option D
-  readline.prompt();
-}
-
 //fuction to Import a quiz file
 function importLocalQuizFile(sourcePath, outputName){
   if(fileSystem.existsSync(sourcePath)){// check source path
@@ -199,13 +128,11 @@ function importLocalQuizFile(sourcePath, outputName){
 function startQuiz(quizName){
   quizOn = true ;
   readline.setPrompt("Answer >> "); //Set prompt character
-  console.log("Fetching " + quizName + " Quiz");
-  currentQuizName = quizName.toUpperCase() ;
-  jsonQuiz = importLocalQuiz(quizName); //set .jsonQuiz
-  console.log("\n Quiz Session Started. \t Maximum Duration : " + jsonQuiz.time + " Mins");
-  currentQuestion = 0 ; //reset current question
-  currentScore = 0 ; //reset user score
-  nextQuestion() ; //serve next question to user
+  console.log("Fetching " + quizName.toUpperCase() + " Quiz");
+  currentQuiz = new quiz(quizName.toUpperCase(), importLocalQuiz(quizName));
+  user.currentScore = 0 ; //reset user score
+  console.log("\n Quiz Session Started. \t Maximum Duration : " + currentQuiz.duration + " Mins");
+  currentQuiz.nextQuestion(readline);
 }
 
 //Function to add on user input command
@@ -220,15 +147,9 @@ function executeInputCommand(commands){
       break ;
     }
     case "setusername":{
-      try{
-        user.FirstName = option1.trim() ;
-        user.LastName = option2.trim() ;
-        readline.prompt();
-      }catch(err){
-        readline.prompt();
-        console.log("Invalid Command. Try Again..");
-        showWelcomeCommands();
-      }
+      user.FirstName = option1.trim() ;
+      user.LastName = option2.trim() ;
+      readline.prompt();
       break ;
     }
     case "listonlinequizzes":{
@@ -236,43 +157,19 @@ function executeInputCommand(commands){
       break ;
     }
     case "importquiz":{
-      try{
-        importLocalQuizFile(option1.trim().replace("\\","/"), option2.trim());
-      }catch(err){
-        readline.prompt();
-        console.log("Invalid Command. Try Again..");
-        showWelcomeCommands();
-      }
+      importLocalQuizFile(option1.trim().replace("\\","/"), option2.trim());
       break ;
     }
     case "downloadonlinequiz":{
-      try{
-        downloadOnlineQuiz(option1.trim());
-      }catch(err){
-        readline.prompt();
-        console.log("Invalid Command. Try Again..");
-        showWelcomeCommands();
-      }
+      downloadOnlineQuiz(option1.trim());
       break ;
     }
     case "uploadquiz":{
-      try{
-        uploadQuiz(option1.trim());
-      }catch(err){
-        readline.prompt();
-        console.log("Invalid Command. Try Again..");
-        showWelcomeCommands();
-      }
+      uploadQuiz(option1.trim());
       break ;
     }
     case "takequiz":{
-      try{
-        startQuiz(option1.trim());
-      }catch(err){
-        readline.prompt();
-        console.log("Invalid Command. Try Again..");
-        showWelcomeCommands();
-      }
+      startQuiz(option1.trim());
       break
     }
     default:{
@@ -282,34 +179,15 @@ function executeInputCommand(commands){
   }
 }
 
-function printQuizResult(user.firstName, user.LastName, quizName, score){
-  console.log("\tFirst Name : " + user.firstName);
-  console.log("\tLast Name : "  + user.lastName);
+function printQuizResult(firstName, lastName, quizName, score){
+  console.log("\tFirst Name : " + firstName);
+  console.log("\tLast Name : "  + lastName);
   console.log("\tQuiz : " + quizName);
   console.log("\tScore : " + score);
 }
 
-
-function setUserName(name){
-    userFirstName = name.trim();
-    if(user.FirstName == ""){
-      console.log("\nPlease Enter a NAME to continue");
-      readline.setPrompt("Your Name >> ");
-      readline.prompt();
-    }else{
-      showWelcomeCommands();
-    }
-}
-
 //function to read user inputs
 readline.on("line", function(line){
-  //Ensure user enters his name before continuing with the app
-
-  if(user.FirstName === "" ){
-    user.FirstName = line ;
-    return ;
-  }
-
   if(quizOn){
     //we are having a quiz right now
     var answer = line.trim();
@@ -319,18 +197,18 @@ readline.on("line", function(line){
       case "B":
       case "C":
       case "D":{
-        if(currentQuestion >= 10){
+        if(currentQuiz.questionNumber >= 10){
           quizOn = false ; //turn off quiz mode
-          console.log("\n Results For " + currentQuizName + " Quiz Session ");
-          printQuizResult(user.FirstName, user.LastName, currentQuizName, currentScore + " / 10")
+          console.log("\n Results For " + currentQuiz.subject + " Quiz Session ");
+          printQuizResult(user.FirstName, user.LastName, currentQuiz.subject, user.currentScore + " / 10")
           readline.setPrompt(">> "); //Set prompt
           showWelcomeCommands();  //Show user welcome commands
           //end of quiz reached
         }else{
-          if(answer === currentAnswer){
-            ++currentScore ; //update user score
+          if(answer === currentQuiz.currentAnswer){
+            ++user.currentScore ; //update user score
           }
-          nextQuestion();//serve next question when ready
+          currentQuiz.nextQuestion(readline);//serve next question when ready
         }
         break ;
       }
@@ -353,7 +231,13 @@ readline.on("line", function(line){
       console.log("Invalid command entered. Try again with appropriate command");
       showWelcomeCommands();
     }else{
-      executeInputCommand(input);
+      try{
+        executeInputCommand(input);
+      }catch(err){
+        readline.prompt();
+        console.log("Invalid Command. Try Again..");
+        showWelcomeCommands();
+      }
     }
   }
 });
