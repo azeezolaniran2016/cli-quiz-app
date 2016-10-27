@@ -63,7 +63,7 @@ function uploadQuizToFirebaseRepository(quizName){
   //check if the quiz doesn't exist on the repo
   readline.pause();
   console.log("Starting Quiz upload");
-  var jsonObject = getQuizJsonObjectFromLocalFile(quizName);
+  var jsonObject = importLocalQuiz(quizName);
   //var jsonString = JSON.stringify(jsonObject);
   //console.log(jsonString);
   //console.log(jsonObject);
@@ -111,7 +111,7 @@ function listLocalQuizzes(){
 }
 
 //Function to get a quizz json object from a specified file in the quizz directory
-function getQuizJsonObjectFromLocalFile(fileName){
+function importLocalQuiz(fileName){
   var content = fileSystem.readFileSync(localQuizzesPath + fileName + ".json");
   var jsonContent = JSON.parse(content);
   return jsonContent ;
@@ -234,7 +234,7 @@ function actOnCommand(commandList){
       readline.setPrompt("Answer >> "); //Set prompt character
       console.log("Fetching " + argument1.trim() + " Quiz");
       currentQuizName = argument1.trim().toUpperCase() ;
-      jsonQuiz = getQuizJsonObjectFromLocalFile(argument1.trim()); //set .jsonQuiz
+      jsonQuiz = importLocalQuiz(argument1.trim()); //set .jsonQuiz
       console.log("\n Quiz Session Started. \t Maximum Duration : " + jsonQuiz.time + " Mins");
       currentQuestion = 0 ; //reset current question
       currentScore = 0 ; //reset user score
