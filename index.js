@@ -3,7 +3,7 @@ const readline = requireReadLine.createInterface({
   input: process.stdin , output: process.stdout, terminal: false
 });
 
-const localQuizzesPath = "./quizzes";
+const localQuizzesPath = "./quizzes/"; //Path to local quizzes folder
 const fileSystem = require("fs");
 const firebase = require("firebase");
 
@@ -73,13 +73,13 @@ function uploadQuizToFirebaseRepository(quizName){
 function downloadOnlineQuiz(quizName){
   readline.pause();
   //Check if the quiz exists first
-  if (fileSystem.existsSync(localQuizzesPath + "/" + quizName + ".json")){
+  if (fileSystem.existsSync(localQuizzesPath + quizName + ".json")){
     console.log("File Already Exists and would be overwritten");
   }
   var query = firebase.database().ref("Subjects/" + quizName);
   query.on("value", function(snapshot){
     var jsonString = JSON.stringify(snapshot.val());
-    saved = fileSystem.writeFileSync(localQuizzesPath + "/" + quizName + ".json", jsonString, 'utf8');
+    saved = fileSystem.writeFileSync(localQuizzesPath + quizName + ".json", jsonString, 'utf8');
     console.log("File Download successfull");
     readline.resume();
     readline.prompt();
@@ -108,7 +108,7 @@ function listLocalQuizzes(){
 
 //Function to get a quizz json object from a specified file in the quizz directory
 function getQuizJsonObjectFromLocalFile(fileName){
-  var content = fileSystem.readFileSync(localQuizzesPath + "/" + fileName + ".json");
+  var content = fileSystem.readFileSync(localQuizzesPath + fileName + ".json");
   var jsonContent = JSON.parse(content);
   return jsonContent ;
 }
@@ -234,11 +234,11 @@ function serveNextJsonQuestion(){
 //fuction to Import a quiz file
 function importLocalQuizFile(sourcePath, outputName){
   if(fileSystem.existsSync(sourcePath)){// check source path
-    if(fileSystem.existsSync(localQuizzesPath + "/" + outputName + ".json")){//Check, we don't want to override an already existing quiz
+    if(fileSystem.existsSync(localQuizzesPath + outputName + ".json")){//Check, we don't want to override an already existing quiz
         console.log("Quiz file already exists locally.")
     }else{//Quiz doesn't already exist. copy it
       console.log("Copying file...") ;
-      fileSystem.createReadStream(sourcePath).pipe(fileSystem.createWriteStream(localQuizzesPath + "/" + outputName + ".json"));
+      fileSystem.createReadStream(sourcePath).pipe(fileSystem.createWriteStream(localQuizzesPath + outputName + ".json"));
       console.log("Finished copying file") ;
     }
   }else{
