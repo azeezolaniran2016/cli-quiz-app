@@ -4,21 +4,10 @@ const readline = requireReadLine.createInterface({
 });
 
 const localQuizzesPath = "./quizzes/"; //Path to local quizzes folder
-const fileSystem = require("fs");
-const firebase = require("firebase");
 const user = new(require("./user"));//create a new user object
 const quiz = require("./quiz");
 const file_handler = new (require("./file_handler"));
-
-const firebaseConfig = { //Declare firebase configuration file
-  apiKey: "AIzaSyAO_eNpYlQ4poDQbKWuCuWz4uWGcqmBscg",
-  authDomain: "cli-quiz-app.firebaseapp.com",
-  databaseURL: "https://cli-quiz-app.firebaseio.com",
-  storageBucket: "cli-quiz-app.appspot.com",
-  messagingSenderId: "236696717593"
-};
-
-firebase.initializeApp(firebaseConfig); //Initialize firebase with configuration
+const onlinedb_handler = new (require("./onlinedb_handler"));
 
 var quizOn = false ; //Quiz mode is turn on
 var currentQuiz ; //variable to hold current quiz Object
@@ -39,52 +28,6 @@ function showWelcomeCommands(){
   console.log('  "setusername [first name] [last name]" - Set user first and last name\n');
   readline.setPrompt(">> ");//set prompt character
   readline.prompt() ; //prompt user for input
-}
-
-function listOnlineQuizzes(){
-  readline.pause();
-  console.log("     Fetching Online Quizzes. Please wait....");
-  var query = firebase.database().ref("Subjects");
-  query.once("value").then(function(snapshot){
-      var count = 1 ; ;
-      snapshot.forEach(function(childSnapshot){
-        console.log("\t" + count + " - " + childSnapshot.key);
-        ++count ;
-      });
-      readline.resume();
-      readline.prompt();
-    });
-}
-
-function uploadQuiz(quizName){
-  //check if the quiz doesn't exist on the repo
-  readline.pause();
-  console.log("Starting Quiz upload");
-  var jsonObject = importLocalQuiz(quizName);
-  var ref = firebase.database().ref("Subjects/");
-  ref.child(quizName).set(jsonObject);
-  console.log("Quizz uploaded");
-  readline.resume();
-  readline.prompt();
-}
-
-function downloadOnlineQuiz(quizName){
-  readline.pause();
-  //Check if the quiz exists first
-  if (fileSystem.existsSync(localQuizzesPath + quizName + ".json")){
-    console.log("File Already Exists and would be overwritten");
-  }
-  var query = firebase.database().ref("Subjects/" + quizName);
-  query.on("value", function(snapshot){
-    var jsonString = JSON.stringify(snapshot.val());
-    saved = fileSystem.writeFileSync(localQuizzesPath + quizName + ".json", jsonString, 'utf8');
-    console.log("File Download successfull");
-    readline.resume();
-    readline.prompt();
-  }, function(errorObject){
-    console.log("Failed to download quiz. Try again later");
-    readline.resume();
-  }) ;
 }
 
 function startQuiz(quizName){
@@ -115,7 +58,7 @@ function executeInputCommand(commands){
       break ;
     }
     case "listonlinequizzes":{
-      listOnlineQuizzes();
+      onlinedb_handler.listOnlineQuizzes(readline);
       break ;
     }
     case "importquiz":{
@@ -123,11 +66,11 @@ function executeInputCommand(commands){
       break ;
     }
     case "downloadonlinequiz":{
-      downloadOnlineQuiz(option1.trim());
+      onlinedb_handler.downloadOnlineQuiz(option1.trim(), readline);
       break ;
     }
     case "uploadquiz":{
-      uploadQuiz(option1.trim());
+      onlinedb_handler.uploadQuiz(file_handler.fetchQuiz(option1.trim()), option1.trim(), readline);
       break ;
     }
     case "takequiz":{
@@ -197,7 +140,7 @@ readline.on("line", function(line){
         executeInputCommand(input);
       }catch(err){
         readline.prompt();
-        console.log("Invalid Command. Try Again..");
+        console.log("Invalid Command. Try Again.." + err);
         showWelcomeCommands();
       }
     }
