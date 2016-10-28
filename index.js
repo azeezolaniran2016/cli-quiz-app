@@ -17,6 +17,7 @@ const helpMessage = "\n\tAvailable Commands\n" + '  "listquizzes" - Lists out al
     '  "uploadquiz [quizname]" - Uploads specified Quiz to firebase quiz repository\n' +
     '  "setusername [Name]" - Set user first and last name\n'
 
+var currentQuizTimer; // variable to point to quiz countdown timer object
 var quizOn = false ; //Quiz mode is turn on
 var currentQuiz ; //variable to hold current quiz Object
 console.log("\nCLI  *************************************************");
@@ -52,6 +53,11 @@ function startQuiz(quizName){
   currentQuiz = new quiz(quizName.toUpperCase(), file_handler.fetchQuiz(quizName));
   user.currentScore = 0 ; //reset user score
   console.log("\n Quiz Session Started. \t Maximum Duration : " + currentQuiz.duration + " Mins");
+  currentQuizTimer = setTimeout(function() {
+    console.log("\n\t TIME OUT !!!");
+    currentQuiz.questionNumber = 10 ;
+    finishQuiz(); }
+    , (currentQuiz.duration * 60000));
   currentQuiz.nextQuestion(readline);
 }
 
@@ -104,6 +110,16 @@ function printQuizResult(firstName, quizName, score){
   console.log("\tScore : " + score);
 }
 
+//function to finish a quiz
+function finishQuiz(){
+  clearTimeout(currentQuizTimer);
+  quizOn = false ; //turn off quiz mode
+  console.log("\n Results For " + currentQuiz.subject + " Quiz Session ");
+  printQuizResult(user.firstName, currentQuiz.subject, user.currentScore + " / " + currentQuiz.questionNumber);
+  readline.setPrompt(">> "); //Set prompt
+  showWelcomeCommands();  //Show user welcome commands
+}
+
 //function to read user inputs
 readline.on("line", function(line){
   if(quizOn){
@@ -116,11 +132,7 @@ readline.on("line", function(line){
       case "C":
       case "D":{
         if(currentQuiz.questionNumber >= 10){
-          quizOn = false ; //turn off quiz mode
-          console.log("\n Results For " + currentQuiz.subject + " Quiz Session ");
-          printQuizResult(user.firstName, currentQuiz.subject, user.currentScore + " / " + currentQuiz.questionNumber);
-          readline.setPrompt(">> "); //Set prompt
-          showWelcomeCommands();  //Show user welcome commands
+          finishQuiz();
           //end of quiz reached
         }else{
           if(answer === currentQuiz.currentAnswer){
@@ -131,12 +143,8 @@ readline.on("line", function(line){
         break ;
       }
       case "Q":{
-        readline.setPrompt(">> ")
-        console.log("Quizz Ended by User");
-        console.log("\n Results For " + currentQuiz.subject + " Quiz Session ");
-        printQuizResult(user.firstName, currentQuiz.subject, user.currentScore + " / " + currentQuiz.questionNumber);
-        quizOn = false ;
-        showWelcomeCommands();
+        console.log("\nYou Ended The Quiz Session");
+        finishQuiz();
         break ;
       }
       default:{
