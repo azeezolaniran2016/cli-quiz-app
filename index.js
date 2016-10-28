@@ -4,28 +4,43 @@ const readline = requireReadLine.createInterface({
 });
 
 const localQuizzesPath = "./quizzes/"; //Path to local quizzes folder
-const user = new(require("./user"));//create a new user object
+const user = new(require("./user"))("Azeez", "Olaniran");//create a new user object
 const quiz = require("./quiz");
 const file_handler = new (require("./file_handler"));
 const onlinedb_handler = new (require("./onlinedb_handler"));
+
+const helpMessage = "\n\tAvailable Commands\n" + '  "listquizzes" - Lists out all quizzes available locally\n' +
+    '  "importquiz [path to source] [output file name] " - Import a quiz file from a directory in your host machine\n' +
+    '  "takequiz [quizname] - Begin taking a quiz from the list of available quizzes"\n' +
+    '  "listonlinequizzes" - Lists Quizzes that are available online\n' +
+    '  "downloadonlinequiz [quizname]" - Downloads specified quiz from firebase quiz repository to your local library\n' +
+    '  "uploadquiz [quizname]" - Uploads specified Quiz to firebase quiz repository\n' +
+    '  "setusername [Name]" - Set user first and last name\n'
 
 var quizOn = false ; //Quiz mode is turn on
 var currentQuiz ; //variable to hold current quiz Object
 console.log("\nCLI  *************************************************");
 console.log("******************* Quiz App *************************");
 console.log("**********************************  By Azeez Olaniran.");
-showWelcomeCommands();
+requestFirstName();
+
+
+function requestFirstName(){
+  readline.question("\nPLEASE ENTER A USER NAME TO CONTINUE \n User Name >> ", function(answer){
+    if(answer.trim() === ""){
+      requestFirstName();
+    }else{
+      user.firstName = answer ;
+      console.log(helpMessage)
+      readline.setPrompt(">> ");
+      readline.prompt();
+    }
+  });
+}
 
 //function to display commands to console
 function showWelcomeCommands(){
-  console.log("\n\tAvailable Commands");
-  console.log('  "listquizzes" - Lists out all quizzes available locally');
-  console.log('  "importquiz [path to source] [output file name] " - Import a quiz file from a directory in your host machine');
-  console.log('  "takequiz [quizname] - Begin taking a quiz from the list of available quizzes"');
-  console.log('  "listonlinequizzes" - Lists Quizzes that are available online');
-  console.log('  "downloadonlinequiz [quizname]" - Downloads specified quiz from firebase quiz repository to your local library');
-  console.log('  "uploadquiz [quizname]" - Uploads specified Quiz to firebase quiz repository');
-  console.log('  "setusername [first name] [last name]" - Set user first and last name\n');
+  console.log(helpMessage);
   readline.setPrompt(">> ");//set prompt character
   readline.prompt() ; //prompt user for input
 }
@@ -52,8 +67,7 @@ function executeInputCommand(commands){
       break ;
     }
     case "setusername":{
-      user.FirstName = option1.trim() ;
-      user.LastName = option2.trim() ;
+      user.firstName = option1.trim() ;
       readline.prompt();
       break ;
     }
@@ -84,9 +98,8 @@ function executeInputCommand(commands){
   }
 }
 
-function printQuizResult(firstName, lastName, quizName, score){
-  console.log("\tFirst Name : " + firstName);
-  console.log("\tLast Name : "  + lastName);
+function printQuizResult(firstName, quizName, score){
+  console.log("\tUser Name : " + firstName);
   console.log("\tQuiz : " + quizName);
   console.log("\tScore : " + score);
 }
@@ -105,7 +118,7 @@ readline.on("line", function(line){
         if(currentQuiz.questionNumber >= 10){
           quizOn = false ; //turn off quiz mode
           console.log("\n Results For " + currentQuiz.subject + " Quiz Session ");
-          printQuizResult(user.FirstName, user.LastName, currentQuiz.subject, user.currentScore + " / 10")
+          printQuizResult(user.firstName, currentQuiz.subject, user.currentScore + " / " + currentQuiz.questionNumber);
           readline.setPrompt(">> "); //Set prompt
           showWelcomeCommands();  //Show user welcome commands
           //end of quiz reached
@@ -120,6 +133,8 @@ readline.on("line", function(line){
       case "Q":{
         readline.setPrompt(">> ")
         console.log("Quizz Ended by User");
+        console.log("\n Results For " + currentQuiz.subject + " Quiz Session ");
+        printQuizResult(user.firstName, currentQuiz.subject, user.currentScore + " / " + currentQuiz.questionNumber);
         quizOn = false ;
         showWelcomeCommands();
         break ;
@@ -140,7 +155,8 @@ readline.on("line", function(line){
         executeInputCommand(input);
       }catch(err){
         readline.prompt();
-        console.log("Invalid Command. Try Again.." + err);
+        quizOn = false ;
+        console.log("Invalid Command. Try Again..");
         showWelcomeCommands();
       }
     }
