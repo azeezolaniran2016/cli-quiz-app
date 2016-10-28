@@ -4,7 +4,7 @@ const readline = requireReadLine.createInterface({
 });
 
 const localQuizzesPath = "./quizzes/"; //Path to local quizzes folder
-const user = new(require("./user"))("Azeez", "Olaniran");//create a new user object
+const user = new(require("./user"));//create a new user object
 const quiz = require("./quiz");
 const file_handler = new (require("./file_handler"));
 const onlinedb_handler = new (require("./onlinedb_handler"));
@@ -24,7 +24,7 @@ console.log("******************* Quiz App *************************");
 console.log("**********************************  By Azeez Olaniran.");
 requestFirstName();
 
-
+//function to ensure user enters his first name before proceeding
 function requestFirstName(){
   readline.question("\nPLEASE ENTER A USER NAME TO CONTINUE \n User Name >> ", function(answer){
     if(answer.trim() === ""){
@@ -92,7 +92,7 @@ function executeInputCommand(commands){
       break
     }
     default:{
-      console.log(input + " is not a recognized command.");
+      console.log(input + " - Unrecognized command.");
       showWelcomeCommands();
     }
   }
